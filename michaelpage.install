@@ -1,0 +1,293 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+
+function michaelpage_install() {
+  // Create content type @entity node
+  $types = array(
+    array(
+      'type' => 'empleados',
+      'name' => st('Empleados'),
+      'base' => 'node_content',
+      'description' => st("Use <em>basic pages</em> for your static content, such as an 'About us' page."),
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+    ),
+  );
+
+  foreach ($types as $type) {
+    $type = node_type_set_defaults($type);
+    node_type_save($type);
+  }
+
+   // Create taxonomy obj 
+   $vocabulary = (object) array(
+      'name' => 'Tipo de salario',
+      'description' => 'Taxonomía para guardar tipos de salarios de los empleados',
+      'machine_name' => 'tipo_de_salario',
+   );  
+   taxonomy_vocabulary_save($vocabulary);
+
+   // Create terms asc taxonomy
+   $vocab = taxonomy_vocabulary_machine_name_load('tipo_de_salario');
+   
+   $term1 = (object) array(
+    'name' => 'Salario bajo 0/1000',
+    'description' => 'Term : Salario entre 0 y 1000 (Salario bajo)',
+    'vid' => $vocab->vid,
+   );
+
+  taxonomy_term_save($term1);
+
+   $term2 = (object) array(
+    'name' => 'Salario medio 1001/3999',
+    'description' => 'Term : Salario entre 1001 y 4000 (Salario medio)',
+    'vid' => $vocab->vid,
+   );
+
+  taxonomy_term_save($term2);
+
+   $term3 = (object) array(
+    'name' => 'Salario superior 4000/∞',
+    'description' => 'Term : Salario superior a 4000 (Salario alto)',
+    'vid' => $vocab->vid,
+   );
+
+  taxonomy_term_save($term3);
+
+  // Create the field base.
+  $field = array(
+    'field_name' => 'field_edad', 
+    'type' => 'number_integer', 
+  );
+  field_create_field($field);
+
+  // Create the field instance on the bundle.
+  $instance = array(
+    'bundle' => 'empleados',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_edad',
+    'label' => 'Edad',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => -2,
+    ),
+  );
+
+  field_create_instance($instance);
+
+  // Create the field base.
+  $field = array(
+    'field_name' => 'field_id_remoto', 
+    'type' => 'number_integer', 
+  );
+  
+  field_create_field($field);
+
+
+  // Exported field_instance: 'node-empleados-field_id_remoto'.
+  $instance = array(
+    'bundle' => 'empleados',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_id_remoto',
+    'label' => 'Id remoto',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => -3,
+    ),
+  );
+
+  field_create_instance($instance);
+
+  // Create the field base.
+  $field = array(
+    'field_name' => 'field_nombre_empleado', 
+    'type' => 'text',
+  );
+  field_create_field($field);
+
+
+  // Exported field_instance: 'node-empleados-field_nombre_empleado'.
+  $instance = array(
+    'bundle' => 'empleados',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_nombre_empleado',
+    'label' => 'Nombre empleado',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => -4,
+    ),
+  );
+
+  field_create_instance($instance);
+
+   $field = array(
+    'field_name' => 'field_salario',
+    'type' => 'taxonomy_term_reference',
+    'label' => st('Label'),
+    'settings' => array(
+      'allowed_values' => array(
+        array(
+          'vocabulary' => 'tipo_de_salario',
+          'parent' => 0
+        )
+      )
+    )
+  );
+  field_create_field($field);
+
+  // Exported field_instance: 'node-empleados-field_salario'.
+  $instance= array(
+    'bundle' => 'empleados',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_salario',
+    'label' => 'Tipo de Salario',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => -1,
+    ),
+  );  
+
+  field_create_instance($instance);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+
+function michaelpage_uninstall() {
+   // Delete Vocabulary
+   $vid = taxonomy_vocabulary_machine_name_load('tipo_de_salario')->vid;
+   taxonomy_vocabulary_delete($vid);
+   // Delete Bundle
+   node_type_delete('empleados');
+   // Delete Views
+   $view = views_get_view('employers');
+   if ($view) {
+     views_delete_view($view);     
+   }
+}

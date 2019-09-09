@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Custom Module // Created
+ * @author Juan David Ceballos.
+ */
+
+include_once 'api/request.inc';
+
+/**
+ * Implements hook_permission().
+ */
+
+function michaelpage_permission() {
+  return array(
+    'administer michaelpage' =>  array(
+      'title' => t('Administer michaelpage'),
+      'description' => t('Perform administration michaelpage'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_help().
+ */
+
+function michaelpage_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#michaelpage':
+      return '<p>' . t('Este @modulo le permite la manipulacion de importacion de sus empleados') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+
+function michaelpage_menu() {
+  
+  $items = array();
+
+  $items['admin/config/michaelpage'] = array(
+    'title' => 'Administration @module Michael Page',
+    'page callback' => 'administration_list',
+    'access arguments' => array('administer users'),
+    'file' => 'includes/administration.inc',
+  );
+
+  $items['admin/config/michaelpage/dashboard'] = array(
+    'title' => 'Administration @module Michael Page',
+    'page callback' => 'administration_list',
+    'position' => 'left',
+    'weight' => -16,    
+    'access arguments' => array('administer users'),
+    'file' => 'includes/administration.inc',
+  );
+
+  $items['admin/config/michaelpage/setup'] = array(
+    'title' => t('Configuracion Herramienta Gestor Empleados'),
+    'description' => 'Settings params michaelpage',
+    'position' => 'left',
+    'weight' => -15,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('michaelpage_setup_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'includes/setup.config.inc',
+  );
+
+  $items['admin/config/michaelpage/batch_fix'] = array(
+    'title' => 'Importacion de Usuarios @Batch fix',
+    'position' => 'left',
+    'weight' => -14,        
+    'page callback' => 'michaelpage_batch_fix',
+    'access arguments' => array('administer users'),
+    'file' => 'includes/batch.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+
+function michaelpage_views_api() {
+    return array(
+     'api' => 3,
+     'path' => drupal_get_path('module', 'michaelpage') . '/views',
+   );   
+}

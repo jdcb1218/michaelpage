@@ -1,0 +1,19 @@
+name = Michael Page
+description = module get data request
+files[] = michaelpage.module
+configure = admin/config/michaelpage
+; Dependencies modules
+dependencies[] = entity
+dependencies[] = views
+dependencies[] = views_ui
+dependencies[] = ctools
+dependencies[] = number
+dependencies[] = options
+dependencies[] = taxonomy
+dependencies[] = text
+; Version modules
+version = "7.x-1.4"
+package = Michael Page
+core = "7.x"
+project = "michaelpage"
+datestamp = "1470638340"
